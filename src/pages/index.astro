@@ -6,6 +6,37 @@ import Layout from '../layouts/Layout.astro';
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+---
+// Import jembatan Sanity yang kita buat tadi
+import { client } from "../lib/sanity";
+
+// Ambil data profil wilayah dari Sanity
+// 'profileWilayah' adalah nama skema yang kita buat sebelumnya
+const dataProfil = await client.fetch(`*[_type == "profileWilayah"][0]`);
+---
+
+<html lang="id">
+	<head>
+		<meta charset="utf-8" />
+		<title>{dataProfil?.namaWilayah || "Memuat..."}</title>
+	</head>
+	<body class="bg-gray-50 p-10">
+		<main class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow">
+			{dataProfil ? (
+				<>
+					<h1 class="text-3xl font-bold text-blue-600">{dataProfil.namaWilayah}</h1>
+					<p class="text-gray-600 mt-2">{dataProfil.deskripsi}</p>
+					
+					<div class="mt-6 p-4 bg-blue-50 rounded-lg">
+						<p class="text-sm text-blue-800">Total Penduduk saat ini:</p>
+						<p class="text-2xl font-bold text-blue-900">
+							{dataProfil.statistik?.jumlahPenduduk} Jiwa
+						</p>
+					</div>
+				</>
+			) : (
+				<p>Data belum diisi di dashboard Sanity.</p>
+			)}
+		</main>
+	</body>
+</html>
