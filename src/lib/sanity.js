@@ -7,3 +7,4 @@ export const client = createClient({
   useCdn: true, // true untuk kecepatan maksimal (gratis)
   apiVersion: "2024-01-31", // gunakan tanggal hari ini atau versi terbaru
 });
+
